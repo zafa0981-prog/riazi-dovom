@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>شمارش چند تا چند تا — ریاضی دوم دبستان</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root { --ink: #1e293b; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Vazirmatn', 'Vazir', 'Tahoma', 'Segoe UI', sans-serif;
+    color: var(--ink);
+    direction: rtl;
+  }
+  body {
+    background: linear-gradient(135deg, #dbeafe, #fce7f3);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-x: hidden;
+  }
+
+  /* ---------- BACKGROUND IMAGE ---------- */
+  .bg {
+    position: fixed;
+    inset: 0;
+    background: url('1.jpg') center center / cover no-repeat;
+    z-index: -2;
+  }
+  .bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .app {
+    width: 100%;
+    max-width: 880px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 40px;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: rgba(255,255,255,.92);
+    border-radius: 18px;
+    padding: 10px 14px;
+    box-shadow: 0 6px 18px rgba(30,64,175,.14);
+    border: 2px solid rgba(255,255,255,.95);
+  }
+  h1 {
+    font-size: clamp(.85rem, 3.2vw, 1.2rem);
+    margin: 0;
+    color: #1e3a8a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: #e0e7ff;
+    padding: 4px;
+    border-radius: 999px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tab {
+    border: none;
+    background: transparent;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: clamp(.65rem, 2vw, .78rem);
+    font-weight: 800;
+    color: #4338ca;
+    cursor: pointer;
+    transition: .2s;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .tab.active {
+    background: #4f46e5;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(79,70,229,.4);
+  }
+  .score {
+    font-size: clamp(.68rem, 2.2vw, .8rem);
+    font-weight: 800;
+    color: #b45309;
+    background: #fef3c7;
+    border: 2px solid #fcd34d;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .board {
+    background: rgba(255,255,255,.94);
+    border-radius: 22px;
+    padding: clamp(10px, 2.5vw, 16px);
+    box-shadow: 0 10px 30px rgba(30,64,175,.16);
+    border: 2px solid rgba(255,255,255,.95);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .prompt {
+    text-align: center;
+    font-size: clamp(.8rem, 2.7vw, 1rem);
+    font-weight: 800;
+    color: #4f46e5;
+    background: #eef2ff;
+    border-radius: 14px;
+    padding: 9px 12px;
+    line-height: 1.6;
+  }
+  .prompt.practice {
+    background: #fce7f3;
+    color: #be185d;
+  }
+
+  /* ---------- STEP SELECTOR ---------- */
+  .step-selector {
+    display: flex;
+    justify-content: center;
+    gap: clamp(4px, 1.4vw, 8px);
+    flex-wrap: wrap;
+  }
+  .step-btn {
+    border: none;
+    font-family: inherit;
+    font-size: clamp(.68rem, 2.3vw, .85rem);
+    font-weight: 800;
+    padding: clamp(6px, 1.8vw, 9px) clamp(9px, 3vw, 16px);
+    border-radius: 12px;
+    cursor: pointer;
+    color: #fff;
+    background: linear-gradient(160deg, #a78bfa, #7c3aed);
+    box-shadow: 0 3px 0 #5b21b6;
+    transition: transform .08s;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .step-btn:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #5b21b6;
+  }
+  .step-btn.active {
+    background: linear-gradient(160deg, #fbbf24, #d97706);
+    box-shadow: 0 3px 0 #92400e;
+    outline: 3px solid #fde68a;
+    outline-offset: 1px;
+  }
+  .step-btn:disabled { filter: grayscale(.7) opacity(.5); cursor: not-allowed; }
+
+  /* ---------- CONTROLS ---------- */
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: clamp(6px, 2vw, 14px);
+    flex-wrap: wrap;
+  }
+  .ctrl-btn {
+    border: none;
+    font-family: inherit;
+    font-size: clamp(.78rem, 2.7vw, .95rem);
+    font-weight: 900;
+    padding: clamp(8px, 2.2vw, 12px) clamp(12px, 4vw, 22px);
+    border-radius: 14px;
+    cursor: pointer;
+    color: #fff;
+    transition: transform .08s;
+    user-select: none;
+    box-shadow: 0 4px 0 rgba(0,0,0,.2);
+  }
+  .ctrl-btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,.2);
+  }
+  .ctrl-btn:disabled { filter: grayscale(.7) opacity(.45); cursor: not-allowed; }
+  .ctrl-btn.play  { background: linear-gradient(160deg, #4ade80, #16a34a); box-shadow: 0 4px 0 #15803d; }
+  .ctrl-btn.stop  { background: linear-gradient(160deg, #fb7185, #e11d48); box-shadow: 0 4px 0 #9f1239; }
+  .ctrl-btn.reset { background: linear-gradient(160deg, #94a3b8, #475569); box-shadow: 0 4px 0 #1e293b; }
+
+  /* ---------- VISUAL AREA ---------- */
+  .visual-area { min-height: 80px; }
+
+  /* Grid 0..99 */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: clamp(2px, 0.6vw, 4px);
+    direction: ltr;
+    background: #f8fafc;
+    padding: clamp(4px, 1.2vw, 8px);
+    border-radius: 14px;
+    border: 2px solid #e2e8f0;
+  }
+  .cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: clamp(3px, 1vw, 7px);
+    font-size: clamp(.55rem, 2vw, .9rem);
+    font-weight: 800;
+    color: #94a3b8;
+    border: 1.5px solid #e2e8f0;
+    transition: background .25s, color .25s, border-color .25s, transform .25s;
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .cell.active {
+    background: linear-gradient(145deg, #60a5fa, #2563eb);
+    color: #fff;
+    border-color: #1e40af;
+    box-shadow: 0 3px 0 #1e40af;
+  }
+  .cell.current {
+    background: linear-gradient(145deg, #fbbf24, #d97706);
+    color: #fff;
+    border-color: #92400e;
+    box-shadow: 0 3px 0 #92400e, 0 0 0 4px rgba(251,191,36,.35);
+    transform: scale(1.1);
+    z-index: 2;
+    animation: cellPop .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes cellPop {
+    0% { transform: scale(0.5); }
+    60% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
+
+  /* Tally (چوب‌خط) */
+  .tally-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(4px, 1.2vw, 10px);
+    justify-content: center;
+    align-content: flex-start;
+    padding: clamp(8px, 2vw, 14px);
+    background: #f8fafc;
+    border-radius: 14px;
+    border: 2px solid #e2e8f0;
+    min-height: 90px;
+  }
+  .tally-group {
+    display: block;
+    width: clamp(26px, 6.5vw, 46px);
+    height: auto;
+  }
+  .tally-line { transition: opacity 0.35s ease; }
+
+  /* Number line */
+  .line-wrap {
+    padding: clamp(4px, 1.5vw, 10px);
+    background: #f8fafc;
+    border-radius: 14px;
+    border: 2px solid #e2e8f0;
+  }
+  .line-wrap svg { width: 100%; height: auto; display: block; }
+  .nl-label {
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
+    font-weight: 800;
+    user-select: none;
+  }
+  /* کمان‌های قبلی: بدون انیمیشن، کامل و پایدار */
+  .nl-arc-stable {
+    /* هیچ چیزی، فقط خط ثابت */
+  }
+  /* کمان جدید: فقط همین یکی انیمیشن دارد */
+  .nl-arc-new {
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: drawArc 0.7s ease-out forwards;
+  }
+  @keyframes drawArc {
+    to { stroke-dashoffset: 0; }
+  }
+  .nl-marker {
+    animation: markerPop .45s cubic-bezier(.34,1.56,.64,1) both;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes markerPop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+
+  /* Sequence strip */
+  .sequence {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: clamp(6px, 1.6vw, 10px) clamp(8px, 2vw, 14px);
+    background: #f0f9ff;
+    border: 2px dashed #7dd3fc;
+    border-radius: 14px;
+    min-height: 52px;
+    flex-wrap: wrap;
+  }
+  .seq-label {
+    font-size: clamp(.7rem, 2.2vw, .82rem);
+    font-weight: 800;
+    color: #0369a1;
+    flex-shrink: 0;
+  }
+  .seq-numbers {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .seq-chip {
+    background: linear-gradient(160deg, #60a5fa, #2563eb);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: clamp(.7rem, 2.4vw, .92rem);
+    box-shadow: 0 3px 0 #1e40af;
+    animation: chipPop .35s cubic-bezier(.34,1.56,.64,1) both;
+    font-variant-numeric: tabular-nums;
+  }
+  .seq-chip.current {
+    background: linear-gradient(160deg, #fbbf24, #d97706);
+    box-shadow: 0 3px 0 #92400e;
+    animation: chipPop .4s cubic-bezier(.34,1.56,.64,1) both, chipPulse 1.2s ease-in-out infinite;
+  }
+  .seq-arrow {
+    color: #94a3b8;
+    font-weight: 900;
+    font-size: clamp(.68rem, 2.2vw, .88rem);
+  }
+  .seq-empty {
+    color: #94a3b8;
+    font-weight: 700;
+    font-size: clamp(.75rem, 2.4vw, .88rem);
+    font-style: italic;
+  }
+  @keyframes chipPop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+  @keyframes chipPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  /* Practice panel */
+  .practice-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(6px, 1.8vw, 12px);
+    flex-wrap: wrap;
+    padding: clamp(10px, 2.6vw, 16px);
+    background: #faf5ff;
+    border-radius: 16px;
+    border: 2px dashed #c084fc;
+    min-height: 90px;
+  }
+  .practice-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 10px;
+    border-radius: 12px;
+    background: #fff;
+    border: 2px solid #d8b4fe;
+    min-width: clamp(48px, 12vw, 72px);
+  }
+  .practice-item .val {
+    font-size: clamp(.9rem, 3.4vw, 1.25rem);
+    font-weight: 900;
+    color: #6b21a8;
+    font-variant-numeric: tabular-nums;
+  }
+  .practice-item.missing {
+    background: #f3e8ff;
+    border-color: #a855f7;
+    border-style: dashed;
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  .practice-item.missing .val {
+    color: #7e22ce;
+    font-size: clamp(1.2rem, 4.5vw, 1.6rem);
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+  .practice-item .tally-mini {
+    width: clamp(40px, 10vw, 60px);
+    height: auto;
+  }
+  .practice-item.correct-reveal {
+    background: linear-gradient(145deg, #86efac, #16a34a);
+    border-color: #15803d;
+    animation: correctPop .5s ease;
+  }
+  .practice-item.correct-reveal .val {
+    color: #fff;
+  }
+  @keyframes correctPop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* Options */
+  .options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(6px, 2vw, 12px);
+  }
+  .option-btn {
+    border: none;
+    font-family: inherit;
+    font-size: clamp(1rem, 4.2vw, 1.4rem);
+    font-weight: 900;
+    padding: clamp(11px, 3.2vw, 16px) 6px;
+    border-radius: 14px;
+    cursor: pointer;
+    color: #fff;
+    background: linear-gradient(160deg, #a78bfa, #7c3aed);
+    box-shadow: 0 4px 0 #5b21b6;
+    transition: transform .1s;
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .option-btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #5b21b6;
+  }
+  .option-btn:disabled { cursor: default; }
+  .option-btn.correct {
+    background: linear-gradient(160deg, #4ade80, #16a34a) !important;
+    box-shadow: 0 4px 0 #15803d !important;
+    animation: correctPop .5s ease;
+  }
+  .option-btn.wrong {
+    background: linear-gradient(160deg, #f87171, #dc2626) !important;
+    box-shadow: 0 4px 0 #991b1b !important;
+    animation: shake .45s ease;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%) translateY(90px);
+    background: rgba(30,41,59,.94);
+    color: #fff;
+    padding: 11px 22px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: clamp(.75rem, 2.6vw, .92rem);
+    opacity: 0;
+    transition: .32s cubic-bezier(.34,1.56,.64,1);
+    z-index: 500;
+    pointer-events: none;
+    white-space: nowrap;
+    max-width: 92vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* Confetti */
+  .confetti {
+    position: fixed;
+    top: -50px;
+    z-index: 999;
+    animation: fall 2.1s linear forwards;
+    pointer-events: none;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(600deg); opacity: .15; }
+  }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 480px) {
+    header { padding: 8px 10px; border-radius: 15px; }
+    .board { border-radius: 18px; }
+    .tab { padding: 5px 7px; font-size: .62rem; }
+    .options { grid-template-columns: repeat(2, 1fr); }
+    .cell { font-size: .55rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<div class="app">
+
+  <header>
+    <h1>🔢 شمارش چند تا چند تا</h1>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-mode="learn-grid">🔢 آموزش شبکه</button>
+      <button class="tab" data-mode="practice-grid">🎯 تمرین شبکه</button>
+      <button class="tab" data-mode="learn-tally">🖐 آموزش چوب‌خط</button>
+      <button class="tab" data-mode="practice-tally">🖐 تمرین چوب‌خط</button>
+      <button class="tab" data-mode="learn-line">📏 آموزش محور</button>
+      <button class="tab" data-mode="practice-line">📏 تمرین محور</button>
+    </div>
+    <div class="score" id="score">امتیاز: ۰</div>
+  </header>
+
+  <div class="board">
+
+    <div class="prompt" id="prompt">یک گام شمارش انتخاب کن و دکمه‌ی شمارش را بزن!</div>
+
+    <!-- Step selector + Controls (learn only) -->
+    <div id="learnControls">
+      <div class="step-selector" id="stepSelector">
+        <button class="step-btn" data-step="2">۲ تا ۲ تا</button>
+        <button class="step-btn" data-step="3">۳ تا ۳ تا</button>
+        <button class="step-btn" data-step="4">۴ تا ۴ تا</button>
+        <button class="step-btn active" data-step="5">۵ تا ۵ تا</button>
+        <button class="step-btn" data-step="10">۱۰ تا ۱۰ تا</button>
+      </div>
+      <div class="controls" style="margin-top:10px;">
+        <button class="ctrl-btn play" id="playBtn">▶ شمارش</button>
+        <button class="ctrl-btn stop" id="stopBtn" disabled>⏸ توقف</button>
+        <button class="ctrl-btn reset" id="resetBtn">🔄 شروع مجدد</button>
+      </div>
+    </div>
+
+    <!-- Visualizations -->
+    <div class="visual-area">
+      <div class="grid" id="gridView"></div>
+      <div class="tally-container" id="tallyView" hidden></div>
+      <div class="line-wrap" id="lineView" hidden>
+        <svg id="lineSVG" viewBox="0 0 1200 210" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+    </div>
+
+    <!-- Sequence strip (learn only) -->
+    <div class="sequence" id="sequenceWrap">
+      <span class="seq-label">شمارش:</span>
+      <div class="seq-numbers" id="seqNumbers">
+        <span class="seq-empty">هنوز شمرده نشده…</span>
+      </div>
+    </div>
+
+    <!-- Practice area (practice only) -->
+    <div id="practiceArea" hidden>
+      <div class="practice-area" id="practiceItems"></div>
+      <div class="options" id="options" style="margin-top:10px;"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==========================================================
+   Sound
+   ========================================================== */
+let actx = null;
+function ac() {
+  if (!actx) {
+    try { actx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch (e) { return null; }
+  }
+  if (actx.state === 'suspended') actx.resume();
+  return actx;
+}
+function tone(freq, dur, type, vol, delay) {
+  const c = ac(); if (!c) return;
+  const t0 = c.currentTime + (delay || 0);
+  const o = c.createOscillator();
+  const g = c.createGain();
+  o.type = type || 'sine';
+  o.frequency.setValueAtTime(freq, t0);
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol || 0.12, t0 + 0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g); g.connect(c.destination);
+  o.start(t0); o.stop(t0 + dur + 0.06);
+}
+const SFX = {
+  tap()      { tone(800, 0.05, 'square', 0.04); },
+  tick(idx)  { tone(500 + idx * 25, 0.11, 'sine', 0.10); },
+  tickEnd()  { tone(880, 0.16, 'triangle', 0.11); },
+  start()    { tone(659, 0.11, 'sine', 0.10); tone(880, 0.15, 'sine', 0.09, 0.10); },
+  complete() { [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.28, 'sine', 0.13, i * 0.10)); },
+  correct()  { [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.26, 'sine', 0.13, i * 0.09)); },
+  wrong()    { tone(220, 0.20, 'sawtooth', 0.08); tone(165, 0.30, 'sawtooth', 0.08, 0.18); }
+};
+
+/* ==========================================================
+   Utilities
+   ========================================================== */
+const FA = '۰۱۲۳۴۵۶۷۸۹';
+const toFa = n => String(n).replace(/\d/g, d => FA[+d]);
+const $ = id => document.getElementById(id);
+
+const MAX_BY_STEP = { 2: 20, 3: 30, 4: 40, 5: 50, 10: 60 };
+
+/* ==========================================================
+   State
+   ========================================================== */
+const state = {
+  mode: 'learn-grid',
+  step: 5,
+  isCounting: false,
+  jumps: 0,
+  timer: null,
+  score: 0,
+  practice: {
+    step: 5,
+    sequence: [],
+    hiddenIndex: 0,
+    answer: 0,
+    options: [],
+    locked: false
+  }
+};
+
+/* ==========================================================
+   Tab helpers
+   ========================================================== */
+function isLearn() { return state.mode.startsWith('learn'); }
+function isGrid()  { return state.mode.endsWith('grid'); }
+function isTally() { return state.mode.endsWith('tally'); }
+function isLine()  { return state.mode.endsWith('line'); }
+
+function setMode(mode) {
+  if (state.mode === mode) return;
+  if (state.isCounting) stopCounting(true);
+  state.mode = mode;
+
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.mode === mode);
+  });
+
+  if (isLearn()) {
+    $('learnControls').hidden = false;
+    $('sequenceWrap').hidden = false;
+    $('practiceArea').hidden = true;
+    $('prompt').classList.remove('practice');
+    $('prompt').textContent = 'یک گام شمارش انتخاب کن و دکمه‌ی شمارش را بزن!';
+    resetLearnState();
+    renderLearn();
+  } else {
+    $('learnControls').hidden = true;
+    $('sequenceWrap').hidden = true;
+    $('practiceArea').hidden = false;
+    $('prompt').classList.add('practice');
+    $('prompt').textContent = 'عدد گمشده را پیدا کن!';
+    SFX.start();
+    newProblem();
+  }
+}
+
+/* ==========================================================
+   GRID
+   ========================================================== */
+function buildGrid() {
+  const g = $('gridView');
+  g.innerHTML = '';
+  for (let i = 0; i < 100; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.dataset.value = i;
+    cell.textContent = toFa(i);
+    g.appendChild(cell);
+  }
+}
+function clearGrid() {
+  document.querySelectorAll('#gridView .cell').forEach(c => {
+    c.classList.remove('active', 'current');
+  });
+}
+function highlightCell(n, current) {
+  const cell = document.querySelector(`#gridView .cell[data-value="${n}"]`);
+  if (!cell) return;
+  if (current) {
+    document.querySelectorAll('#gridView .cell.current').forEach(c => {
+      c.classList.remove('current');
+      c.classList.add('active');
+    });
+    cell.classList.remove('active');
+    cell.classList.add('current');
+  }
+}
+
+/* ==========================================================
+   TALLY
+   ========================================================== */
+function buildTallyDisplay() {
+  const container = $('tallyView');
+  container.innerHTML = '';
+  const max = MAX_BY_STEP[state.step];
+  const numGroups = Math.ceil(max / 5);
+
+  for (let g = 0; g < numGroups; g++) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 70 60');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.classList.add('tally-group');
+
+    for (let i = 1; i <= 4; i++) {
+      const x = 8 + i * 12;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x);
+      line.setAttribute('y1', '10');
+      line.setAttribute('x2', x);
+      line.setAttribute('y2', '50');
+      line.setAttribute('stroke', '#2563eb');
+      line.setAttribute('stroke-width', '4');
+      line.setAttribute('stroke-linecap', 'round');
+      line.dataset.gid = g * 5 + i;
+      line.style.opacity = '0';
+      line.classList.add('tally-line');
+      svg.appendChild(line);
+    }
+
+    const diag = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    diag.setAttribute('x1', '4');
+    diag.setAttribute('y1', '52');
+    diag.setAttribute('x2', '56');
+    diag.setAttribute('y2', '8');
+    diag.setAttribute('stroke', '#2563eb');
+    diag.setAttribute('stroke-width', '4');
+    diag.setAttribute('stroke-linecap', 'round');
+    diag.dataset.gid = g * 5 + 5;
+    diag.style.opacity = '0';
+    diag.classList.add('tally-line');
+    svg.appendChild(diag);
+
+    container.appendChild(svg);
+  }
+}
+function revealTallies(count) {
+  document.querySelectorAll('#tallyView .tally-line').forEach(line => {
+    const idx = +line.dataset.gid;
+    line.style.opacity = idx <= count ? '1' : '0';
+  });
+}
+function clearTallies() {
+  document.querySelectorAll('#tallyView .tally-line').forEach(line => {
+    line.style.opacity = '0';
+  });
+}
+
+/* ==========================================================
+   NUMBER LINE — LEARNING
+   ==========================================================
+   در این نسخه، کمان‌های قبلی با کلاس پایدار (بدون انیمیشن)
+   ترسیم می‌شوند تا پس از هر پرش، روی محور باقی بمانند.
+   فقط کمان جدید (آخرین پرش) با انیمیشن ظاهر می‌شود.
+   ========================================================== */
+function renderLineSVG(step, numJumps, animateLast) {
+  const max = MAX_BY_STEP[step];
+  const W = 1200, H = 210;
+  const x0 = 55, xE = 1145;
+  const xOf = n => x0 + (n / max) * (xE - x0);
+  const y = 160;
+  const arcBase = y - 8;
+  const arcTop = 30;
+
+  let s = '';
+
+  /* خط اصلی */
+  s += `<line x1="${x0 - 20}" y1="${y}" x2="${xE + 25}" y2="${y}"
+              stroke="#64748b" stroke-width="3.5" stroke-linecap="round"/>`;
+
+  /* تیک‌ها و اعداد */
+  const numTicks = max / step;
+  for (let i = 0; i <= numTicks; i++) {
+    const n = i * step;
+    const x = xOf(n);
+    s += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + 14}"
+                stroke="#475569" stroke-width="2.4" stroke-linecap="round"/>`;
+    s += `<text class="nl-label" x="${x}" y="${y + 38}" text-anchor="middle"
+                font-size="17" fill="#334155">${toFa(n)}</text>`;
+  }
+
+  /* کمان‌ها — همه روی محور باقی می‌مانند */
+  for (let i = 0; i < numJumps && i < numTicks; i++) {
+    const n1 = i * step;
+    const n2 = (i + 1) * step;
+    const x1 = xOf(n1);
+    const x2 = xOf(n2);
+    const mid = (x1 + x2) / 2;
+    const isNewest = animateLast && i === numJumps - 1;
+
+    /* کمان‌های قبلی: پایدار و بدون انیمیشن */
+    if (isNewest) {
+      s += `<path class="nl-arc-new"
+                  d="M ${x1},${arcBase} Q ${mid},${arcTop} ${x2},${arcBase}"
+                  fill="none" stroke="#2563eb" stroke-width="4.5" stroke-linecap="round"/>`;
+    } else {
+      s += `<path d="M ${x1},${arcBase} Q ${mid},${arcTop} ${x2},${arcBase}"
+                  fill="none" stroke="#2563eb" stroke-width="4.5" stroke-linecap="round"/>`;
+    }
+
+    /* عدد بالای کمان */
+    s += `<text class="nl-label" x="${mid}" y="${arcTop - 4}" text-anchor="middle"
+                font-size="16" fill="#2563eb">${toFa(n2)}</text>`;
+  }
+
+  /* نشانگر شروع روی ۰ */
+  s += `<circle cx="${x0}" cy="${y}" r="9" fill="#fbbf24" stroke="#d97706" stroke-width="2.5"/>`;
+
+  /* نشانگر موقعیت فعلی */
+  if (numJumps > 0) {
+    const cur = numJumps * step;
+    if (cur <= max) {
+      const cx = xOf(cur);
+      s += `<circle class="nl-marker" cx="${cx}" cy="${y}" r="11"
+                    fill="#16a34a" stroke="white" stroke-width="3"/>`;
+    }
+  }
+
+  $('lineSVG').innerHTML = s;
+}
+
+/* ==========================================================
+   NUMBER LINE — PRACTICE
+   ========================================================== */
+function renderLinePractice() {
+  const p = state.practice;
+  const step = p.step;
+  const seq = p.sequence;
+  const max = seq[seq.length - 1];
+
+  const x0 = 55, xE = 1145;
+  const xOf = n => x0 + (n / max) * (xE - x0);
+  const y = 160;
+  const arcBase = y - 8;
+  const arcTop = 30;
+
+  let s = '';
+  s += `<line x1="${x0 - 20}" y1="${y}" x2="${xE + 25}" y2="${y}"
+              stroke="#64748b" stroke-width="3.5" stroke-linecap="round"/>`;
+
+  const numTicks = Math.round(max / step);
+  for (let i = 0; i <= numTicks; i++) {
+    const n = i * step;
+    const x = xOf(n);
+    let seqIdx = -1;
+    for (let k = 0; k < seq.length; k++) {
+      if (seq[k] === n) { seqIdx = k; break; }
+    }
+    const isMissingTick = (seqIdx !== -1 && seqIdx === p.hiddenIndex);
+
+    s += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + 14}"
+                stroke="#475569" stroke-width="2.4" stroke-linecap="round"/>`;
+
+    if (isMissingTick) {
+      s += `<text class="nl-label" x="${x}" y="${y + 38}" text-anchor="middle"
+                  font-size="20" fill="#7e22ce" font-weight="900">؟</text>`;
+      s += `<circle cx="${x}" cy="${y}" r="13" fill="#a855f7" stroke="white" stroke-width="3" opacity="0.5"/>`;
+    } else {
+      s += `<text class="nl-label" x="${x}" y="${y + 38}" text-anchor="middle"
+                  font-size="17" fill="#334155">${toFa(n)}</text>`;
+    }
+  }
+
+  /* همه کمان‌ها (پایدار و بدون انیمیشن) */
+  for (let i = 0; i < numTicks; i++) {
+    const n1 = i * step;
+    const n2 = (i + 1) * step;
+    const x1 = xOf(n1);
+    const x2 = xOf(n2);
+    const mid = (x1 + x2) / 2;
+    s += `<path d="M ${x1},${arcBase} Q ${mid},${arcTop} ${x2},${arcBase}"
+                fill="none" stroke="#2563eb" stroke-width="4.5" stroke-linecap="round" opacity="0.6"/>`;
+  }
+
+  s += `<circle cx="${x0}" cy="${y}" r="9" fill="#fbbf24" stroke="#d97706" stroke-width="2.5"/>`;
+
+  $('lineSVG').innerHTML = s;
+}
+
+/* ==========================================================
+   Learn mode rendering
+   ========================================================== */
+function resetLearnState() {
+  state.jumps = 0;
+  state.isCounting = false;
+  if (state.timer) { clearInterval(state.timer); state.timer = null; }
+  $('playBtn').disabled = false;
+  $('stopBtn').disabled = true;
+  document.querySelectorAll('.step-btn').forEach(b => b.disabled = false);
+}
+
+function renderLearn() {
+  $('gridView').hidden = !isGrid();
+  $('tallyView').hidden = !isTally();
+  $('lineView').hidden = !isLine();
+
+  if (isGrid()) {
+    clearGrid();
+    buildGrid();
+  } else if (isTally()) {
+    buildTallyDisplay();
+    clearTallies();
+  } else if (isLine()) {
+    renderLineSVG(state.step, 0, false);
+  }
+
+  $('seqNumbers').innerHTML = '<span class="seq-empty">هنوز شمرده نشده…</span>';
+
+  document.querySelectorAll('.step-btn').forEach(b => {
+    b.classList.toggle('active', +b.dataset.step === state.step);
+  });
+}
+
+function updateSequenceDisplay() {
+  const el = $('seqNumbers');
+  el.innerHTML = '';
+  if (state.jumps === 0) {
+    el.innerHTML = '<span class="seq-empty">هنوز شمرده نشده…</span>';
+    return;
+  }
+  const seq = [];
+  for (let i = 1; i <= state.jumps; i++) seq.push(i * state.step);
+  seq.forEach((n, idx) => {
+    if (idx > 0) {
+      const a = document.createElement('span');
+      a.className = 'seq-arrow';
+      a.textContent = '←';
+      el.appendChild(a);
+    }
+    const chip = document.createElement('span');
+    chip.className = 'seq-chip';
+    chip.textContent = toFa(n);
+    if (idx === seq.length - 1) chip.classList.add('current');
+    el.appendChild(chip);
+  });
+}
+
+/* ==========================================================
+   Counting animation
+   ========================================================== */
+function startCounting() {
+  if (state.isCounting) return;
+  ac();
+  resetLearnState();
+  state.isCounting = true;
+  state.jumps = 0;
+
+  if (isGrid()) clearGrid();
+  else if (isTally()) clearTallies();
+  else if (isLine()) renderLineSVG(state.step, 0, false);
+
+  updateSequenceDisplay();
+
+  $('playBtn').disabled = true;
+  $('stopBtn').disabled = false;
+  document.querySelectorAll('.step-btn').forEach(b => b.disabled = true);
+
+  SFX.start();
+
+  const max = MAX_BY_STEP[state.step];
+  const totalJumps = max / state.step;
+
+  state.timer = setInterval(() => {
+    if (state.jumps >= totalJumps) {
+      finishCounting();
+      return;
+    }
+    state.jumps++;
+    const n = state.jumps * state.step;
+
+    if (isGrid()) {
+      highlightCell(n, true);
+    } else if (isTally()) {
+      revealTallies(n);
+    } else if (isLine()) {
+      /* کمان جدید اضافه می‌شود، ولی قبلی‌ها روی محور می‌مانند */
+      renderLineSVG(state.step, state.jumps, true);
+    }
+    updateSequenceDisplay();
+
+    if (state.jumps === totalJumps) SFX.tickEnd();
+    else SFX.tick(state.jumps - 1);
+  }, 640);
+}
+
+function finishCounting() {
+  stopCounting();
+  SFX.complete();
+  confetti();
+  toast('آفرین! شمارش کامل شد 🎉');
+}
+
+function stopCounting(silent) {
+  if (state.timer) { clearInterval(state.timer); state.timer = null; }
+  state.isCounting = false;
+  $('playBtn').disabled = false;
+  $('stopBtn').disabled = true;
+  document.querySelectorAll('.step-btn').forEach(b => b.disabled = false);
+  if (!silent) SFX.tap();
+}
+
+function resetCounting() {
+  stopCounting(true);
+  state.jumps = 0;
+  if (isGrid()) clearGrid();
+  else if (isTally()) clearTallies();
+  else if (isLine()) renderLineSVG(state.step, 0, false);
+  updateSequenceDisplay();
+  SFX.tap();
+}
+
+/* ==========================================================
+   Practice — problem generation
+   ========================================================== */
+function newProblem() {
+  const steps = [2, 3, 4, 5, 10];
+  const step = steps[Math.floor(Math.random() * steps.length)];
+  const startFromZero = Math.random() < 0.6;
+  const start = startFromZero ? 0 : step;
+
+  const seq = [];
+  for (let i = 0; i < 5; i++) seq.push(start + i * step);
+  const hiddenIndex = 1 + Math.floor(Math.random() * 3);
+  const answer = seq[hiddenIndex];
+
+  const opts = new Set([answer]);
+  const cands = [
+    answer - step, answer + step,
+    answer + 1, answer - 1,
+    answer + 2, answer - 2
+  ].filter(x => x >= 0 && x !== answer);
+  cands.sort(() => Math.random() - 0.5);
+  for (const c of cands) {
+    if (opts.size >= 4) break;
+    opts.add(c);
+  }
+  let f = 1;
+  while (opts.size < 4) {
+    if (f !== answer && !opts.has(f)) opts.add(f);
+    f++;
+  }
+
+  state.practice = {
+    step,
+    sequence: seq,
+    hiddenIndex,
+    answer,
+    options: Array.from(opts).sort(() => Math.random() - 0.5),
+    locked: false
+  };
+  renderPractice();
+}
+
+function tallyGroupHTML(lines, color) {
+  if (lines === 5) {
+    return `<svg viewBox="0 0 60 50" style="width:100%;height:auto;">
+      <line x1="8" y1="8" x2="8" y2="42" stroke="${color}" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="18" y1="8" x2="18" y2="42" stroke="${color}" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="28" y1="8" x2="28" y2="42" stroke="${color}" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="38" y1="8" x2="38" y2="42" stroke="${color}" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="4" y1="43" x2="42" y2="7" stroke="${color}" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>`;
+  }
+  let s = `<svg viewBox="0 0 60 50" style="width:100%;height:auto;">`;
+  for (let i = 0; i < lines; i++) {
+    const x = 8 + i * 10;
+    s += `<line x1="${x}" y1="8" x2="${x}" y2="42" stroke="${color}" stroke-width="3.5" stroke-linecap="round"/>`;
+  }
+  s += `</svg>`;
+  return s;
+}
+
+function tallyFullHTML(count, color) {
+  const groups = [];
+  let rem = count;
+  while (rem >= 5) { groups.push(5); rem -= 5; }
+  if (rem > 0) groups.push(rem);
+  return groups.map(g => tallyGroupHTML(g, color)).join('');
+}
+
+function renderPractice() {
+  const p = state.practice;
+  const items = $('practiceItems');
+  items.innerHTML = '';
+
+  if (isTally()) {
+    p.sequence.forEach((n, i) => {
+      const div = document.createElement('div');
+      div.className = 'practice-item';
+      if (i === p.hiddenIndex) {
+        div.classList.add('missing');
+        div.innerHTML = `<div class="val">؟</div>`;
+      } else {
+        div.innerHTML = `<div class="val">${toFa(n)}</div>
+                         <div class="tally-mini">${tallyFullHTML(n, '#6b21a8')}</div>`;
+      }
+      items.appendChild(div);
+    });
+    items.style.display = 'flex';
+    $('lineView').hidden = true;
+    $('gridView').hidden = true;
+    $('tallyView').hidden = true;
+  } else if (isLine()) {
+    renderLinePractice();
+    $('lineView').hidden = false;
+    $('gridView').hidden = true;
+    $('tallyView').hidden = true;
+    items.style.display = 'none';
+  } else {
+    p.sequence.forEach((n, i) => {
+      const div = document.createElement('div');
+      div.className = 'practice-item';
+      if (i === p.hiddenIndex) {
+        div.classList.add('missing');
+        div.innerHTML = `<div class="val">؟</div>`;
+      } else {
+        div.innerHTML = `<div class="val">${toFa(n)}</div>`;
+      }
+      items.appendChild(div);
+    });
+    items.style.display = 'flex';
+    $('gridView').hidden = true;
+    $('tallyView').hidden = true;
+    $('lineView').hidden = true;
+  }
+
+  const optsEl = $('options');
+  optsEl.innerHTML = '';
+  p.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = toFa(opt);
+    btn.addEventListener('click', () => chooseOption(opt, btn));
+    optsEl.appendChild(btn);
+  });
+}
+
+function chooseOption(val, btn) {
+  const p = state.practice;
+  if (p.locked) return;
+  p.locked = true;
+
+  if (val === p.answer) {
+    btn.classList.add('correct');
+    SFX.correct();
+    state.score++;
+    $('score').textContent = 'امتیاز: ' + toFa(state.score);
+
+    if (isTally() || isGrid()) {
+      const items = $('practiceItems').children;
+      const missing = items[p.hiddenIndex];
+      if (missing) {
+        missing.classList.remove('missing');
+        missing.classList.add('correct-reveal');
+        if (isTally()) {
+          missing.innerHTML = `<div class="val">${toFa(p.answer)}</div>
+                               <div class="tally-mini">${tallyFullHTML(p.answer, '#ffffff')}</div>`;
+        } else {
+          missing.innerHTML = `<div class="val">${toFa(p.answer)}</div>`;
+        }
+      }
+    } else if (isLine()) {
+      const savedHidden = p.hiddenIndex;
+      p.hiddenIndex = -1;
+      renderLinePractice();
+      p.hiddenIndex = savedHidden;
+      SFX.tickEnd();
+    }
+
+    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+    confetti();
+    toast('آفرین! درست بود 🎉');
+    setTimeout(() => {
+      if (!isLearn()) newProblem();
+    }, 2200);
+  } else {
+    btn.classList.add('wrong');
+    SFX.wrong();
+    toast('دوباره تلاش کن 💪');
+    setTimeout(() => {
+      btn.classList.remove('wrong');
+      p.locked = false;
+    }, 800);
+  }
+}
+
+/* ==========================================================
+   Toast / Confetti
+   ========================================================== */
+let toastTimer = null;
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+}
+function confetti() {
+  const emojis = ['🎉', '⭐', '✨', '🎈', '🏆', '💎'];
+  for (let i = 0; i < 20; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = (Math.random() * 96) + 'vw';
+    el.style.fontSize = (16 + Math.random() * 22) + 'px';
+    el.style.animationDelay = (Math.random() * 0.5) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2900);
+  }
+}
+
+/* ==========================================================
+   Event listeners
+   ========================================================== */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    ac(); SFX.tap(); setMode(tab.dataset.mode);
+  });
+});
+
+document.querySelectorAll('.step-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    ac();
+    if (state.isCounting) return;
+    const newStep = parseInt(b.dataset.step, 10);
+    if (newStep === state.step) return;
+    state.step = newStep;
+    SFX.tap();
+    if (isTally()) {
+      buildTallyDisplay();
+      clearTallies();
+    } else if (isLine()) {
+      renderLineSVG(state.step, 0, false);
+    }
+    document.querySelectorAll('.step-btn').forEach(x => {
+      x.classList.toggle('active', +x.dataset.step === state.step);
+    });
+    state.jumps = 0;
+    if (isGrid()) clearGrid();
+    updateSequenceDisplay();
+  });
+});
+
+$('playBtn').addEventListener('click', () => { ac(); startCounting(); });
+$('stopBtn').addEventListener('click', () => { ac(); stopCounting(false); });
+$('resetBtn').addEventListener('click', () => { ac(); resetCounting(); });
+
+document.addEventListener('pointerdown', () => ac(), { once: true });
+
+/* ==========================================================
+   Init
+   ========================================================== */
+buildGrid();
+renderLearn();
+</script>
+</body>
+</html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#171a35">
+<title>شمارش شاد | ریاضی دوم دبستان - فصل اول</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;min-height:100%}
+
+  /* =====================================================
+     پس‌زمینه: تصویر 1.jpg کاملاً واضح و بدون هیچ پوششی
+     ===================================================== */
+  body{
+    font-family:'Vazirmatn','IRANSans',Tahoma,Arial,sans-serif;
+    background-color:#141731; /* فقط پشتیبان اگر تصویر بارگذاری نشد */
+    background-image:url('1.jpg');
+    background-repeat:no-repeat;
+    background-position:center center;
+    background-size:cover;
+    background-attachment:fixed;
+    color:#fff;
+    padding:14px 14px 30px;
+    display:flex;justify-content:center;
+    overflow-x:hidden;
+    user-select:none;
+  }
+
+  .wrap{width:100%;max-width:920px;display:flex;flex-direction:column;gap:14px}
+
+  /* =====================================================
+     شیشه‌ی کاملاً شفاف (Glassmorphism)
+     ===================================================== */
+  .glass{
+    background:rgba(255,255,255,0.10);
+    -webkit-backdrop-filter:blur(7px) saturate(1.3);
+    backdrop-filter:blur(7px) saturate(1.3);
+    border:1px solid rgba(255,255,255,0.28);
+    box-shadow:
+      0 8px 30px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.40),
+      inset 0 -1px 0 rgba(0,0,0,0.08);
+  }
+
+  /* ---------- HEADER ---------- */
+  .top{
+    display:flex;align-items:center;gap:12px;
+    border-radius:22px;padding:12px 16px;
+  }
+  .logo{
+    width:52px;height:52px;flex:0 0 52px;border-radius:16px;
+    display:grid;place-items:center;font-size:28px;
+    background:linear-gradient(150deg,#ffd166,#ff8fab);
+    box-shadow:0 6px 18px rgba(255,143,171,.5);
+    animation:float 3s ease-in-out infinite;
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  .top h1{
+    margin:0;font-size:clamp(17px,4.6vw,24px);font-weight:900;letter-spacing:-.5px;
+    color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.85),0 0 22px rgba(124,92,255,.6);
+  }
+  .top p{
+    margin:2px 0 0;font-size:clamp(10.5px,2.9vw,13px);font-weight:700;
+    color:#e9ecff;text-shadow:0 2px 8px rgba(0,0,0,.85);
+  }
+  .spacer{flex:1}
+  .icon-btn{
+    width:44px;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.14);color:#fff;font-size:19px;cursor:pointer;
+    display:grid;place-items:center;transition:.2s;touch-action:manipulation;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  }
+  .icon-btn:active{transform:scale(.9)}
+  .icon-btn.off{opacity:.45}
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display:flex;gap:6px;padding:6px;border-radius:20px;
+  }
+  .tab{
+    flex:1;border:0;background:transparent;color:#e6e9ff;
+    font-family:inherit;font-weight:800;font-size:clamp(11.5px,3.2vw,15px);
+    padding:11px 4px;border-radius:15px;cursor:pointer;transition:.25s;
+    touch-action:manipulation;white-space:nowrap;
+    text-shadow:0 2px 8px rgba(0,0,0,.8);
+  }
+  .tab.active{
+    background:linear-gradient(150deg,rgba(124,92,255,.92),rgba(180,75,255,.92));
+    color:#fff;box-shadow:0 6px 20px rgba(124,92,255,.55);
+    transform:translateY(-1px);text-shadow:0 1px 6px rgba(0,0,0,.5);
+  }
+
+  /* ---------- PANELS ---------- */
+  .panel{display:none;flex-direction:column;gap:14px;animation:fade .35s ease}
+  .panel.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  /* ====== تخته‌ی شیشه‌ای کاملاً شفاف ====== */
+  .board{
+    border-radius:26px;padding:16px;
+    min-height:230px;
+    display:flex;flex-direction:column;gap:14px;
+    color:#fff;
+  }
+
+  /* counter (learn mode) */
+  .counter{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    background:rgba(255,255,255,0.16);
+    -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+    border-radius:20px;padding:8px 22px;align-self:center;
+    border:2px dashed rgba(255,255,255,0.55);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 18px rgba(0,0,0,.2);
+  }
+  .num{
+    font-size:clamp(40px,13vw,72px);font-weight:900;line-height:1.05;
+    color:#fff;min-width:1.7em;text-align:center;
+    text-shadow:
+      0 3px 14px rgba(109,94,252,1),
+      0 0 26px rgba(255,255,255,.75),
+      0 2px 4px rgba(0,0,0,.6);
+  }
+  .num.bump{animation:bump .38s cubic-bezier(.2,1.8,.5,1)}
+  @keyframes bump{0%{transform:scale(1)}45%{transform:scale(1.3)}100%{transform:scale(1)}}
+  .counter small{
+    font-size:clamp(12px,3.4vw,15px);font-weight:800;color:#fff;
+    text-shadow:0 2px 8px rgba(0,0,0,.85);opacity:.95;
+  }
+
+  /* items grid */
+  .grid{
+    display:flex;flex-wrap:wrap;gap:clamp(7px,2vw,12px);
+    justify-content:center;align-items:center;flex:1;min-height:130px;
+    padding:8px;border-radius:18px;transition:.25s;
+  }
+  .grid.zone{border:3px dashed rgba(255,255,255,0.55);cursor:pointer}
+  .grid.over{animation:shake .45s;border-color:#ff5a6e;background:rgba(255,80,100,.18)}
+  .grid.win{border-color:#16c784;background:rgba(22,199,132,.18)}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+  .item{
+    width:clamp(44px,11.5vw,66px);height:clamp(44px,11.5vw,66px);
+    display:grid;place-items:center;
+    font-size:clamp(24px,7.2vw,38px);line-height:1;
+    background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(232,238,255,.92));
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.85);
+    box-shadow:
+      0 5px 0 rgba(109,94,252,.30),
+      0 8px 18px rgba(0,0,0,.35),
+      inset 0 1px 0 rgba(255,255,255,.9);
+    animation:pop .5s cubic-bezier(.2,1.7,.45,1) both;
+  }
+  @keyframes pop{
+    0%{transform:scale(0) rotate(-30deg);opacity:0}
+    65%{transform:scale(1.18) rotate(6deg);opacity:1}
+    100%{transform:scale(1) rotate(0)}
+  }
+
+  /* buttons */
+  .controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    font-family:inherit;font-weight:800;font-size:clamp(13px,3.7vw,16px);
+    border-radius:18px;padding:14px 22px;cursor:pointer;
+    transition:.18s;touch-action:manipulation;min-height:50px;
+    background:rgba(255,255,255,0.16);color:#fff;
+    border:1px solid rgba(255,255,255,0.40);
+    -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 18px rgba(0,0,0,.28);
+    text-shadow:0 2px 6px rgba(0,0,0,.7);
+  }
+  .btn:active{transform:scale(.94)}
+  .btn.primary{
+    background:linear-gradient(150deg,rgba(124,92,255,.92),rgba(180,75,255,.92));
+    border:1px solid rgba(255,255,255,.45);
+    box-shadow:0 8px 24px rgba(124,92,255,.55),inset 0 1px 0 rgba(255,255,255,.5);
+  }
+  .btn:disabled{opacity:.45;pointer-events:none}
+
+  /* quiz */
+  .qtop{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-weight:900;font-size:clamp(14px,4.2vw,19px);
+    background:rgba(255,255,255,0.16);
+    -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+    border-radius:16px;padding:10px 14px;
+    color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.85);
+    border:1px solid rgba(255,255,255,.30);
+  }
+  .score{
+    background:rgba(255,244,214,0.95);
+    color:#a06a00;border-radius:12px;padding:6px 12px;
+    font-size:clamp(12px,3.5vw,15px);font-weight:900;
+    text-shadow:none;
+    box-shadow:0 3px 10px rgba(0,0,0,.25);
+  }
+  .options{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(7px,2.2vw,12px);
+  }
+  .opt{
+    font-family:inherit;font-weight:900;
+    font-size:clamp(22px,7vw,34px);
+    padding:14px 0;border-radius:18px;cursor:pointer;
+    background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(232,238,255,.92));
+    color:#4b3bd6;border:1px solid rgba(255,255,255,.85);
+    box-shadow:
+      0 6px 0 rgba(109,94,252,.30),
+      0 8px 18px rgba(0,0,0,.30),
+      inset 0 1px 0 rgba(255,255,255,.9);
+    transition:.15s;touch-action:manipulation;min-height:62px;
+  }
+  .opt:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(109,94,252,.30),0 4px 10px rgba(0,0,0,.28)}
+  .opt.good{background:linear-gradient(160deg,#22d18e,#0ea371);color:#fff;box-shadow:0 6px 0 #0a8b60,0 8px 18px rgba(0,0,0,.3)}
+  .opt.bad{background:linear-gradient(160deg,#ff8093,#ef3f58);color:#fff;box-shadow:0 6px 0 #c22b41,0 8px 18px rgba(0,0,0,.3);animation:shake .4s}
+
+  .msg{
+    text-align:center;font-weight:900;
+    font-size:clamp(13px,3.8vw,17px);
+    color:#c9ffe6;min-height:24px;transition:.25s;
+    text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 20px rgba(18,185,129,.5);
+  }
+  .msg.warn{color:#ffc4ce;text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 20px rgba(239,63,88,.6)}
+
+  /* build */
+  .btop{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    font-weight:900;font-size:clamp(15px,4.4vw,20px);
+    background:rgba(255,255,255,0.16);
+    -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+    border-radius:16px;padding:12px 14px;
+    color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.85);
+    border:1px solid rgba(255,255,255,.30);
+  }
+  .btop b{
+    font-size:clamp(28px,9vw,44px);color:#fff;line-height:1;
+    text-shadow:
+      0 3px 14px rgba(109,94,252,1),
+      0 0 26px rgba(255,255,255,.75),
+      0 2px 4px rgba(0,0,0,.6);
+  }
+
+  /* confetti */
+  .confetti{position:fixed;top:-24px;z-index:9999;pointer-events:none;border-radius:3px;animation:fall linear forwards}
+  @keyframes fall{
+    0%{transform:translateY(0) rotate(0);opacity:1}
+    100%{transform:translateY(108vh) rotate(760deg);opacity:.85}
+  }
+
+  @media (max-width:420px){
+    body{padding:10px 10px 22px}
+    .logo{width:44px;height:44px;flex-basis:44px;font-size:24px}
+    .board{border-radius:22px;padding:12px;min-height:200px}
+    .btn{padding:12px 16px}
+    .num{min-width:1.6em}
+  }
+  @media (orientation:landscape) and (max-height:520px){
+    .board{min-height:150px}
+    .item{width:42px;height:42px;font-size:24px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top glass">
+    <div class="logo">🔢</div>
+    <div>
+      <h1>شمارش شاد</h1>
+      <p>ریاضی دوم دبستان • فصل اول</p>
+    </div>
+    <div class="spacer"></div>
+    <button class="icon-btn" id="soundBtn" aria-label="صدای برنامه">🔊</button>
+  </header>
+
+  <nav class="tabs glass">
+    <button class="tab active" data-t="learn">📚 یاد بگیر</button>
+    <button class="tab" data-t="quiz">❓ چند تا؟</button>
+    <button class="tab" data-t="build">🧱 بساز</button>
+  </nav>
+
+  <!-- ================= LEARN ================= -->
+  <section class="panel active" id="panel-learn">
+    <div class="board glass">
+      <div class="counter">
+        <span class="num" id="learnNum">۰</span>
+        <small>تا شمردیم</small>
+      </div>
+      <div class="grid" id="learnGrid"></div>
+    </div>
+    <div class="msg" id="learnMsg">دکمه‌ی شروع را بزن؛ با هم می‌شماریم! 👇</div>
+    <div class="controls">
+      <button class="btn primary" id="learnStart">▶ شروع شمارش</button>
+      <button class="btn" id="learnReset">🔄 از نو</button>
+    </div>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section class="panel" id="panel-quiz">
+    <div class="board glass">
+      <div class="qtop">
+        <span>چند تا <span id="quizEmoji">🍎</span> می‌بینی؟</span>
+        <span class="score">⭐ امتیاز: <span id="score">۰</span></span>
+      </div>
+      <div class="grid" id="quizGrid"></div>
+    </div>
+    <div class="msg" id="quizMsg">یک عدد را انتخاب کن</div>
+    <div class="options" id="quizOptions"></div>
+    <div class="controls">
+      <button class="btn" id="quizSkip">⏭ سؤال بعدی</button>
+    </div>
+  </section>
+
+  <!-- ================= BUILD ================= -->
+  <section class="panel" id="panel-build">
+    <div class="board glass">
+      <div class="btop">بساز: <b id="buildTarget">۱۲</b> تا</div>
+      <div class="grid zone" id="buildGrid"></div>
+    </div>
+    <div class="msg" id="buildMsg">روی کادر بزن یا دکمه‌ی ➕ را فشار بده</div>
+    <div class="controls">
+      <button class="btn primary" id="buildAdd">➕ اضافه کن</button>
+      <button class="btn" id="buildReset">🔄 از نو</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================
+   ابزارهای پایه
+   ========================================================= */
+const FA_DIGITS = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+const toFa = n => String(n).replace(/\d/g, d => FA_DIGITS[+d]);
+const rnd = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+
+const EMOJIS = ['🍎','🍊','🍋','🍇','🍓','🐣','🐠','⭐','🎈','🍪','🐞','🌸','🚗','⚽','🧸','🍩','🦋','🍒'];
+
+/* =========================================================
+   صدا (Web Audio API - بدون فایل خارجی)
+   ========================================================= */
+let actx = null, soundOn = true;
+
+function ac(){
+  if(!actx){
+    try{ actx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch(e){ return null; }
+  }
+  if(actx.state === 'suspended') actx.resume();
+  return actx;
+}
+
+function popSound(i = 1){
+  if(!soundOn) return;
+  const a = ac(); if(!a) return;
+  const t = a.currentTime;
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = 'triangle';
+  const base = 300 + Math.min(i, 22) * 26;
+  o.frequency.setValueAtTime(base, t);
+  o.frequency.exponentialRampToValueAtTime(base * 1.85, t + 0.08);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.20, t + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+  o.connect(g); g.connect(a.destination);
+  o.start(t); o.stop(t + 0.24);
+}
+
+function successSound(){
+  if(!soundOn) return;
+  const a = ac(); if(!a) return;
+  const t0 = a.currentTime;
+  [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    const t = t0 + i * 0.09;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.24, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+    o.connect(g); g.connect(a.destination);
+    o.start(t); o.stop(t + 0.42);
+  });
+}
+
+function errorSound(){
+  if(!soundOn) return;
+  const a = ac(); if(!a) return;
+  const t0 = a.currentTime;
+  [220, 165].forEach((f, i) => {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = 'sawtooth'; o.frequency.value = f;
+    const t = t0 + i * 0.14;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.14, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+    o.connect(g); g.connect(a.destination);
+    o.start(t); o.stop(t + 0.22);
+  });
+}
+
+function clickSound(){
+  if(!soundOn) return;
+  const a = ac(); if(!a) return;
+  const t = a.currentTime;
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = 'square'; o.frequency.value = 620;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.07, t + 0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+  o.connect(g); g.connect(a.destination);
+  o.start(t); o.stop(t + 0.1);
+}
+
+/* =========================================================
+   افکت‌ها
+   ========================================================= */
+function confetti(){
+  const colors = ['#ffd166','#ef476f','#06d6a0','#118ab2','#8338ec','#ff9f1c','#ff8fab'];
+  for(let i = 0; i < 44; i++){
+    const d = document.createElement('div');
+    d.className = 'confetti';
+    d.style.left = Math.random() * 100 + 'vw';
+    d.style.background = colors[Math.floor(Math.random() * colors.length)];
+    d.style.animationDelay = (Math.random() * 0.35) + 's';
+    d.style.animationDuration = (0.9 + Math.random() * 0.9) + 's';
+    d.style.width = (6 + Math.random() * 8) + 'px';
+    d.style.height = (8 + Math.random() * 10) + 'px';
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 2400);
+  }
+}
+
+function bump(el){
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+}
+
+function makeItem(emoji){
+  const d = document.createElement('div');
+  d.className = 'item';
+  d.textContent = emoji;
+  return d;
+}
+
+/* =========================================================
+   وضعیت کلی
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const learnGrid  = $('learnGrid'),  learnNum = $('learnNum'),  learnMsg = $('learnMsg');
+const quizGrid   = $('quizGrid'),   quizOpts = $('quizOptions'),
+      quizMsg    = $('quizMsg'),    quizEmoji = $('quizEmoji'), scoreEl = $('score');
+const buildGrid  = $('buildGrid'),  buildTarget = $('buildTarget'), buildMsg = $('buildMsg');
+
+let score = 0;
+
+/* =========================================================
+   ۱) حالت «یاد بگیر» — شمارش بیشتر از ۱۰ (۱۲ تا ۲۰)
+   ========================================================= */
+let learnTimer = null, learnRunning = false;
+
+function resetLearn(){
+  clearInterval(learnTimer);
+  learnTimer = null; learnRunning = false;
+  learnGrid.innerHTML = '';
+  learnNum.textContent = toFa(0);
+  learnNum.classList.remove('bump');
+  learnMsg.className = 'msg';
+  learnMsg.textContent = 'دکمه‌ی شروع را بزن؛ با هم می‌شماریم! 👇';
+  $('learnStart').disabled = false;
+  $('learnStart').textContent = '▶ شروع شمارش';
+}
+
+function startLearn(){
+  if(learnRunning) return;
+  ac();
+  clearInterval(learnTimer);
+  learnGrid.innerHTML = '';
+  learnNum.textContent = toFa(0);
+  learnMsg.className = 'msg';
+  learnMsg.textContent = 'با دقت بشمار... 👀';
+  $('learnStart').disabled = true;
+
+  const total  = rnd(12, 20);   // ← بیشتر از ۱۰
+  const emoji  = pick(EMOJIS);
+  let i = 0;
+  learnRunning = true;
+
+  learnTimer = setInterval(() => {
+    if(i >= total){
+      clearInterval(learnTimer);
+      learnTimer = null;
+      learnRunning = false;
+      successSound();
+      confetti();
+      learnMsg.textContent = `آفرین! ${toFa(total)} تا ${emoji} شمردیم 🎉`;
+      $('learnStart').disabled = false;
+      $('learnStart').textContent = '▶ دوباره بشمار';
+      return;
+    }
+    i++;
+    learnGrid.appendChild(makeItem(emoji));
+    learnNum.textContent = toFa(i);
+    bump(learnNum);
+    popSound(i);
+  }, 520);
+}
+
+$('learnStart').addEventListener('click', () => { clickSound(); startLearn(); });
+$('learnReset').addEventListener('click', () => { clickSound(); resetLearn(); });
+
+/* =========================================================
+   ۲) حالت «چند تا؟» — شمارش بیشتر از ۱۰ (۱۱ تا ۱۵)
+   ========================================================= */
+let quizAnswer = 0, quizLocked = false;
+
+function newQuiz(){
+  quizLocked = false;
+  quizGrid.innerHTML = '';
+  quizOpts.innerHTML = '';
+  quizMsg.className = 'msg';
+  quizMsg.textContent = 'یک عدد را انتخاب کن';
+
+  const n     = rnd(11, 15);   // ← بیشتر از ۱۰
+  const emoji = pick(EMOJIS);
+  quizAnswer  = n;
+  quizEmoji.textContent = emoji;
+
+  for(let k = 0; k < n; k++) quizGrid.appendChild(makeItem(emoji));
+
+  // ساخت گزینه‌ها
+  const set = new Set([n]);
+  while(set.size < 4){
+    let v = n + rnd(-4, 4);
+    if(v < 8 || v > 20) v = rnd(9, 19);
+    set.add(v);
+  }
+  const opts = [...set].sort(() => Math.random() - 0.5);
+
+  opts.forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = toFa(v);
+    b.addEventListener('click', () => answerQuiz(b, v));
+    quizOpts.appendChild(b);
+  });
+}
+
+function answerQuiz(btn, val){
+  if(quizLocked) return;
+  if(val === quizAnswer){
+    quizLocked = true;
+    btn.classList.add('good');
+    successSound();
+    confetti();
+    score++;
+    scoreEl.textContent = toFa(score);
+    quizMsg.textContent = `درست بود! ${toFa(quizAnswer)} تا بود 🎉`;
+    setTimeout(newQuiz, 1600);
+  } else {
+    errorSound();
+    btn.classList.add('bad');
+    btn.disabled = true;
+    quizMsg.className = 'msg warn';
+    quizMsg.textContent = 'اشکال نداره، دوباره بشمار و امتحان کن 💪';
+  }
+}
+
+$('quizSkip').addEventListener('click', () => { clickSound(); newQuiz(); });
+
+/* =========================================================
+   ۳) حالت «بساز» — هدف بیشتر از ۱۰ (۱۱ تا ۱۸)
+   ========================================================= */
+let buildCount = 0, buildGoal = 0, buildEmoji = '🍎', buildDone = false;
+
+function newBuild(){
+  buildCount = 0;
+  buildDone  = false;
+  buildGoal  = rnd(11, 18);   // ← بیشتر از ۱۰
+  buildEmoji = pick(EMOJIS);
+  buildTarget.textContent = toFa(buildGoal);
+  buildGrid.innerHTML = '';
+  buildGrid.className = 'grid zone';
+  buildMsg.className = 'msg';
+  buildMsg.textContent = `روی کادر بزن یا دکمه‌ی ➕ را فشار بده (${buildEmoji})`;
+}
+
+function addBuild(){
+  if(buildDone) return;
+  ac();
+  if(buildCount >= buildGoal + 2) return;
+
+  buildCount++;
+  buildGrid.appendChild(makeItem(buildEmoji));
+  popSound(buildCount);
+
+  if(buildCount === buildGoal){
+    buildDone = true;
+    buildGrid.classList.remove('zone');
+    buildGrid.classList.add('win');
+    successSound();
+    confetti();
+    buildMsg.className = 'msg';
+    buildMsg.textContent = `عالی! دقیقاً ${toFa(buildGoal)} تا ساختی 🎉`;
+  } else if(buildCount > buildGoal){
+    buildDone = true;
+    buildGrid.classList.add('over');
+    errorSound();
+    buildMsg.className = 'msg warn';
+    buildMsg.textContent = `اوه! بیشتر از ${toFa(buildGoal)} شد. «از نو» را بزن.`;
+  } else {
+    buildMsg.textContent = `تا حالا ${toFa(buildCount)} تا ساخته‌ای...`;
+  }
+}
+
+buildGrid.addEventListener('click', addBuild);
+$('buildAdd').addEventListener('click', () => { clickSound(); addBuild(); });
+$('buildReset').addEventListener('click', () => { clickSound(); newBuild(); });
+
+/* =========================================================
+   تب‌ها
+   ========================================================= */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    ac();
+    clickSound();
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $('panel-' + tab.dataset.t).classList.add('active');
+
+    if(tab.dataset.t === 'learn') resetLearn();
+    if(tab.dataset.t === 'quiz')  newQuiz();
+    if(tab.dataset.t === 'build') newBuild();
+  });
+});
+
+/* =========================================================
+   کلید صدا
+   ========================================================= */
+$('soundBtn').addEventListener('click', function(){
+  soundOn = !soundOn;
+  this.textContent = soundOn ? '🔊' : '🔇';
+  this.classList.toggle('off', !soundOn);
+  if(soundOn){ ac(); clickSound(); }
+});
+
+/* =========================================================
+   شروع
+   ========================================================= */
+resetLearn();
+newBuild();
+document.addEventListener('touchstart', () => ac(), { once: true });
+document.addEventListener('click', () => ac(), { once: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#171a35">
+<title>ده‌تایی و یکی | ریاضی دوم دبستان - فصل اول</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;min-height:100%}
+
+  body{
+    font-family:'Vazirmatn','IRANSans',Tahoma,Arial,sans-serif;
+    background-color:#141731;
+    background-image:url('1.jpg');
+    background-repeat:no-repeat;
+    background-position:center center;
+    background-size:cover;
+    background-attachment:fixed;
+    color:#fff;
+    padding:14px 14px 30px;
+    display:flex;justify-content:center;
+    overflow-x:hidden;
+    user-select:none;
+  }
+
+  .wrap{width:100%;max-width:960px;display:flex;flex-direction:column;gap:14px}
+
+  .glass{
+    background:rgba(255,255,255,0.10);
+    -webkit-backdrop-filter:blur(7px) saturate(1.3);
+    backdrop-filter:blur(7px) saturate(1.3);
+    border:1px solid rgba(255,255,255,0.28);
+    box-shadow:
+      0 8px 30px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.40),
+      inset 0 -1px 0 rgba(0,0,0,0.08);
+  }
+
+  .top{
+    display:flex;align-items:center;gap:12px;
+    border-radius:22px;padding:12px 16px;
+  }
+  .logo{
+    width:52px;height:52px;flex:0 0 52px;border-radius:16px;
+    display:grid;place-items:center;font-size:26px;
+    background:linear-gradient(150deg,#ffd166,#ff8fab);
+    box-shadow:0 6px 18px rgba(255,143,171,.5);
+    animation:float 3s ease-in-out infinite;
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  .top h1{
+    margin:0;font-size:clamp(17px,4.6vw,24px);font-weight:900;letter-spacing:-.5px;
+    text-shadow:0 2px 10px rgba(0,0,0,.85),0 0 22px rgba(124,92,255,.6);
+  }
+  .top p{
+    margin:2px 0 0;font-size:clamp(10.5px,2.9vw,13px);font-weight:700;
+    color:#e9ecff;text-shadow:0 2px 8px rgba(0,0,0,.85);
+  }
+  .spacer{flex:1}
+  .icon-btn{
+    width:44px;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.14);color:#fff;font-size:19px;cursor:pointer;
+    display:grid;place-items:center;transition:.2s;touch-action:manipulation;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  }
+  .icon-btn:active{transform:scale(.9)}
+  .icon-btn.off{opacity:.45}
+
+  .tabs{display:flex;gap:6px;padding:6px;border-radius:20px}
+  .tab{
+    flex:1;border:0;background:transparent;color:#e6e9ff;
+    font-family:inherit;font-weight:800;font-size:clamp(11.5px,3.2vw,15px);
+    padding:11px 4px;border-radius:15px;cursor:pointer;transition:.25s;
+    touch-action:manipulation;white-space:nowrap;
+    text-shadow:0 2px 8px rgba(0,0,0,.8);
+  }
+  .tab.active{
+    background:linear-gradient(150deg,rgba(124,92,255,.92),rgba(180,75,255,.92));
+    color:#fff;box-shadow:0 6px 20px rgba(124,92,255,.55);
+    transform:translateY(-1px);text-shadow:0 1px 6px rgba(0,0,0,.5);
+  }
+
+  .panel{display:none;flex-direction:column;gap:14px;animation:fade .35s ease}
+  .panel.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .board{
+    border-radius:26px;padding:16px;
+    min-height:250px;
+    display:flex;flex-direction:column;gap:14px;
+  }
+
+  .num-box{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    background:rgba(255,255,255,0.16);
+    -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+    border-radius:20px;padding:8px 22px;align-self:center;
+    border:2px dashed rgba(255,255,255,0.55);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 18px rgba(0,0,0,.2);
+  }
+  .num{
+    font-size:clamp(38px,12vw,66px);font-weight:900;line-height:1.05;
+    color:#fff;min-width:1.9em;text-align:center;
+    text-shadow:
+      0 3px 14px rgba(109,94,252,1),
+      0 0 26px rgba(255,255,255,.75),
+      0 2px 4px rgba(0,0,0,.6);
+  }
+  .num.bump{animation:bump .38s cubic-bezier(.2,1.8,.5,1)}
+  @keyframes bump{0%{transform:scale(1)}45%{transform:scale(1.28)}100%{transform:scale(1)}}
+  .num-box small{
+    font-size:clamp(11px,3.2vw,14px);font-weight:800;color:#fff;
+    text-shadow:0 2px 8px rgba(0,0,0,.85);opacity:.95;
+  }
+
+  .blocks{
+    display:flex;flex-wrap:wrap;gap:clamp(10px,3vw,20px);
+    justify-content:center;align-items:flex-end;flex:1;
+    min-height:150px;padding:6px;
+  }
+  .group{
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    padding:12px 14px;border-radius:20px;
+    background:rgba(255,255,255,0.09);
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    border:1px dashed rgba(255,255,255,0.35);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.25);
+    transition:.25s;
+  }
+  .group.empty{border-color:rgba(255,255,255,.2);opacity:.85}
+  .group .row{
+    display:flex;gap:clamp(4px,1.2vw,7px);align-items:flex-end;
+    min-height:clamp(56px,15vw,74px);min-width:40px;
+    justify-content:center;
+  }
+  .group .label{
+    font-size:clamp(11px,3.1vw,14px);font-weight:800;color:#fff;
+    text-shadow:0 2px 8px rgba(0,0,0,.9);
+    background:rgba(0,0,0,.22);padding:3px 10px;border-radius:10px;
+    white-space:nowrap;
+  }
+  .group .label b{font-weight:900}
+  .ph{color:rgba(255,255,255,.45);font-weight:900;font-size:20px;padding:4px 8px}
+
+  .tens{
+    width:clamp(20px,4.8vw,26px);
+    height:clamp(56px,15vw,74px);
+    border-radius:7px;
+    background:linear-gradient(180deg,#ffd166,#f9a825);
+    border:2px solid #d98b00;
+    position:relative;overflow:hidden;
+    box-shadow:0 4px 0 rgba(180,90,0,.55), 0 6px 14px rgba(0,0,0,.35);
+    animation:pop .45s cubic-bezier(.2,1.7,.45,1) both;
+  }
+  .tens::after{
+    content:'';position:absolute;inset:0;
+    background:repeating-linear-gradient(to bottom,
+      transparent 0 9%, rgba(180,90,0,.55) 9% 10%);
+    border-radius:5px;
+  }
+
+  .one{
+    width:clamp(20px,4.8vw,26px);
+    height:clamp(20px,4.8vw,26px);
+    border-radius:6px;
+    background:linear-gradient(160deg,#7de3b6,#12b981);
+    border:2px solid #0a8a5e;
+    box-shadow:0 4px 0 rgba(10,138,94,.6), 0 6px 12px rgba(0,0,0,.3);
+    animation:pop .45s cubic-bezier(.2,1.7,.45,1) both;
+  }
+
+  .clickable{cursor:pointer;transition:transform .12s}
+  .clickable:active{transform:scale(.85)}
+
+  @keyframes pop{
+    0%{transform:scale(0) rotate(-25deg);opacity:0}
+    65%{transform:scale(1.16) rotate(5deg);opacity:1}
+    100%{transform:scale(1) rotate(0)}
+  }
+
+  .eq{
+    text-align:center;font-weight:900;
+    font-size:clamp(14px,4.2vw,19px);color:#fff;
+    text-shadow:0 2px 10px rgba(0,0,0,.9);
+    background:rgba(0,0,0,.22);
+    border-radius:16px;padding:10px 12px;
+    min-height:20px;
+    animation:fade .4s ease;
+  }
+  .eq .t{color:#ffd166;text-shadow:0 2px 8px rgba(0,0,0,.9)}
+  .eq .o{color:#7de3b6;text-shadow:0 2px 8px rgba(0,0,0,.9)}
+
+  .controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    font-family:inherit;font-weight:800;font-size:clamp(13px,3.7vw,16px);
+    border-radius:18px;padding:14px 20px;cursor:pointer;
+    transition:.18s;touch-action:manipulation;min-height:50px;
+    background:rgba(255,255,255,0.16);color:#fff;
+    border:1px solid rgba(255,255,255,0.40);
+    -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 18px rgba(0,0,0,.28);
+    text-shadow:0 2px 6px rgba(0,0,0,.7);
+  }
+  .btn:active{transform:scale(.94)}
+  .btn.primary{
+    background:linear-gradient(150deg,rgba(124,92,255,.92),rgba(180,75,255,.92));
+    border:1px solid rgba(255,255,255,.45);
+    box-shadow:0 8px 24px rgba(124,92,255,.55),inset 0 1px 0 rgba(255,255,255,.5);
+  }
+  .btn.ten{
+    background:linear-gradient(150deg,rgba(255,209,102,.95),rgba(249,168,37,.95));
+    color:#5c3a00;text-shadow:0 1px 2px rgba(255,255,255,.6);
+    border:1px solid rgba(255,255,255,.6);
+    box-shadow:0 8px 22px rgba(249,168,37,.5),inset 0 1px 0 rgba(255,255,255,.7);
+  }
+  .btn.one{
+    background:linear-gradient(150deg,rgba(125,227,182,.95),rgba(18,185,129,.95));
+    color:#003d28;text-shadow:0 1px 2px rgba(255,255,255,.5);
+    border:1px solid rgba(255,255,255,.6);
+    box-shadow:0 8px 22px rgba(18,185,129,.5),inset 0 1px 0 rgba(255,255,255,.7);
+  }
+  .btn:disabled{opacity:.45;pointer-events:none}
+
+  .qtop{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-weight:900;font-size:clamp(14px,4.2vw,19px);
+    background:rgba(255,255,255,0.16);
+    -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+    border-radius:16px;padding:10px 14px;
+    color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.85);
+    border:1px solid rgba(255,255,255,.30);
+  }
+  .score{
+    background:rgba(255,244,214,0.95);
+    color:#a06a00;border-radius:12px;padding:6px 12px;
+    font-size:clamp(12px,3.5vw,15px);font-weight:900;
+    text-shadow:none;
+    box-shadow:0 3px 10px rgba(0,0,0,.25);
+    white-space:nowrap;
+  }
+  .options{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(7px,2.2vw,12px);
+  }
+  .opt{
+    font-family:inherit;font-weight:900;
+    font-size:clamp(22px,6.5vw,32px);
+    padding:14px 0;border-radius:18px;cursor:pointer;
+    background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(232,238,255,.92));
+    color:#4b3bd6;border:1px solid rgba(255,255,255,.85);
+    box-shadow:
+      0 6px 0 rgba(109,94,252,.30),
+      0 8px 18px rgba(0,0,0,.30),
+      inset 0 1px 0 rgba(255,255,255,.9);
+    transition:.15s;touch-action:manipulation;min-height:62px;
+    unicode-bidi:isolate;
+    font-variant-numeric:tabular-nums;
+  }
+  .opt:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(109,94,252,.30),0 4px 10px rgba(0,0,0,.28)}
+  .opt.good{background:linear-gradient(160deg,#22d18e,#0ea371);color:#fff;box-shadow:0 6px 0 #0a8b60,0 8px 18px rgba(0,0,0,.3)}
+  .opt.bad{background:linear-gradient(160deg,#ff8093,#ef3f58);color:#fff;box-shadow:0 6px 0 #c22b41,0 8px 18px rgba(0,0,0,.3);animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+  .msg{
+    text-align:center;font-weight:900;
+    font-size:clamp(13px,3.8vw,17px);
+    color:#c9ffe6;min-height:24px;transition:.25s;
+    text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 20px rgba(18,185,129,.5);
+  }
+  .msg.warn{color:#ffc4ce;text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 20px rgba(239,63,88,.6)}
+  .msg.info{color:#fff3c4;text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 20px rgba(255,209,102,.5)}
+
+  .btop{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    font-weight:900;font-size:clamp(15px,4.4vw,20px);
+    background:rgba(255,255,255,0.16);
+    -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+    border-radius:16px;padding:10px 14px;
+    color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.85);
+    border:1px solid rgba(255,255,255,.30);
+  }
+  .btop b{
+    font-size:clamp(28px,9vw,44px);color:#fff;line-height:1;
+    text-shadow:
+      0 3px 14px rgba(109,94,252,1),
+      0 0 26px rgba(255,255,255,.75),
+      0 2px 4px rgba(0,0,0,.6);
+  }
+
+  .confetti{position:fixed;top:-24px;z-index:9999;pointer-events:none;border-radius:3px;animation:fall linear forwards}
+  @keyframes fall{
+    0%{transform:translateY(0) rotate(0);opacity:1}
+    100%{transform:translateY(108vh) rotate(760deg);opacity:.85}
+  }
+
+  @media (max-width:420px){
+    body{padding:10px 10px 22px}
+    .logo{width:44px;height:44px;flex-basis:44px;font-size:22px}
+    .board{border-radius:22px;padding:12px;min-height:210px}
+    .btn{padding:12px 14px;font-size:13px}
+    .num{min-width:1.7em}
+    .blocks{gap:8px}
+    .group{padding:9px 10px;border-radius:16px}
+  }
+  @media (orientation:landscape) and (max-height:540px){
+    .board{min-height:170px}
+    .blocks{min-height:100px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top glass">
+    <div class="logo">🔢</div>
+    <div>
+      <h1>ده‌تایی و یکی</h1>
+      <p>ریاضی دوم دبستان • فصل اول</p>
+    </div>
+    <div class="spacer"></div>
+    <button class="icon-btn" id="soundBtn" aria-label="صدای برنامه">🔊</button>
+  </header>
+
+  <nav class="tabs glass">
+    <button class="tab active" data-t="learn">📚 یاد بگیر</button>
+    <button class="tab" data-t="quiz">❓ بشمار</button>
+    <button class="tab" data-t="build">🧱 بساز</button>
+  </nav>
+
+  <!-- ================= LEARN ================= -->
+  <section class="panel active" id="panel-learn">
+    <div class="board glass">
+      <div class="num-box">
+        <span class="num" id="learnNum">۰</span>
+        <small>می‌شماریم</small>
+      </div>
+      <div class="blocks" id="learnBlocks"></div>
+      <div class="eq" id="learnEq"></div>
+    </div>
+    <div class="msg" id="learnMsg">دکمه‌ی شروع را بزن؛ با هم ده‌تایی و یکی می‌سازیم! 👇</div>
+    <div class="controls">
+      <button class="btn primary" id="learnStart">▶ شروع</button>
+      <button class="btn" id="learnReset">🔄 از نو</button>
+    </div>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section class="panel" id="panel-quiz">
+    <div class="board glass">
+      <div class="qtop">
+        <span id="quizQ">این عدد چنده؟</span>
+        <span class="score">⭐ امتیاز: <span id="score">۰</span></span>
+      </div>
+      <div class="blocks" id="quizBlocks"></div>
+    </div>
+    <div class="msg" id="quizMsg">یک گزینه را انتخاب کن</div>
+    <div class="options" id="quizOptions"></div>
+    <div class="controls">
+      <button class="btn" id="quizSkip">⏭ سؤال بعدی</button>
+    </div>
+  </section>
+
+  <!-- ================= BUILD ================= -->
+  <section class="panel" id="panel-build">
+    <div class="board glass">
+      <div class="btop">بساز: <b id="buildTarget">۳۴</b></div>
+      <div class="blocks" id="buildBlocks"></div>
+      <div class="eq" id="buildEq"></div>
+    </div>
+    <div class="msg" id="buildMsg">با دکمه‌ها بساز — روی هر قطعه بزن تا برداشته شود</div>
+    <div class="controls">
+      <button class="btn ten" id="buildAddTen">➕ ده‌تایی</button>
+      <button class="btn one" id="buildAddOne">➕ یکی</button>
+      <button class="btn" id="buildReset">🔄 از نو</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================
+   ابزارهای پایه
+   ========================================================= */
+const FA = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+const toFa = n => String(n).replace(/\d/g, d => FA[+d]);
+const rnd = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const $ = id => document.getElementById(id);
+
+/* =========================================================
+   صدا (Web Audio API)
+   ========================================================= */
+let actx = null, soundOn = true;
+
+function ac(){
+  if(!actx){
+    try{ actx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch(e){ return null; }
+  }
+  if(actx.state === 'suspended') actx.resume();
+  return actx;
+}
+
+function popSound(step = 1, up = true){
+  if(!soundOn) return;
+  const a = ac(); if(!a) return;
+  const t = a.currentTime;
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = 'triangle';
+  const base = 300 + Math.min(step, 20) * 24;
+  o.frequency.setValueAtTime(up ? base : base * 0.7, t);
+  o.frequency.exponentialRampToValueAtTime(up ? base * 1.7 : base * 0.4, t + 0.09);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.18, t + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+  o.connect(g); g.connect(a.destination);
+  o.start(t); o.stop(t + 0.24);
+}
+
+function successSound(){
+  if(!soundOn) return;
+  const a = ac(); if(!a) return;
+  const t0 = a.currentTime;
+  [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    const t = t0 + i * 0.09;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.22, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+    o.connect(g); g.connect(a.destination);
+    o.start(t); o.stop(t + 0.42);
+  });
+}
+
+function errorSound(){
+  if(!soundOn) return;
+  const a = ac(); if(!a) return;
+  const t0 = a.currentTime;
+  [220, 165].forEach((f, i) => {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = 'sawtooth'; o.frequency.value = f;
+    const t = t0 + i * 0.14;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.13, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+    o.connect(g); g.connect(a.destination);
+    o.start(t); o.stop(t + 0.22);
+  });
+}
+
+function clickSound(){
+  if(!soundOn) return;
+  const a = ac(); if(!a) return;
+  const t = a.currentTime;
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = 'square'; o.frequency.value = 620;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.06, t + 0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+  o.connect(g); g.connect(a.destination);
+  o.start(t); o.stop(t + 0.1);
+}
+
+/* =========================================================
+   افکت‌ها
+   ========================================================= */
+function confetti(){
+  const colors = ['#ffd166','#ef476f','#06d6a0','#118ab2','#8338ec','#ff9f1c','#ff8fab'];
+  for(let i = 0; i < 46; i++){
+    const d = document.createElement('div');
+    d.className = 'confetti';
+    d.style.left = Math.random() * 100 + 'vw';
+    d.style.background = colors[Math.floor(Math.random() * colors.length)];
+    d.style.animationDelay = (Math.random() * 0.35) + 's';
+    d.style.animationDuration = (0.9 + Math.random() * 0.9) + 's';
+    d.style.width = (6 + Math.random() * 8) + 'px';
+    d.style.height = (8 + Math.random() * 10) + 'px';
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 2400);
+  }
+}
+
+function bump(el){
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+}
+
+/* =========================================================
+   ساخت گروه‌های ده‌تایی و یکی
+   ========================================================= */
+function makeBlock(type, delay){
+  const b = document.createElement('div');
+  b.className = type;
+  b.style.animationDelay = (delay * 0.05) + 's';
+  return b;
+}
+
+function makeGroup(type, count, opts = {}){
+  const g = document.createElement('div');
+  g.className = 'group' + (count === 0 ? ' empty' : '');
+
+  const row = document.createElement('div');
+  row.className = 'row';
+
+  if(count === 0){
+    const ph = document.createElement('div');
+    ph.className = 'ph';
+    ph.textContent = '—';
+    row.appendChild(ph);
+  } else {
+    for(let i = 0; i < count; i++){
+      const b = makeBlock(type, i);
+      if(opts.clickable){
+        b.classList.add('clickable');
+        b.addEventListener('click', e => {
+          e.stopPropagation();
+          opts.onRemove && opts.onRemove(type);
+        });
+      }
+      row.appendChild(b);
+    }
+  }
+
+  g.appendChild(row);
+
+  const lbl = document.createElement('div');
+  lbl.className = 'label';
+  lbl.innerHTML = (type === 'tens' ? 'ده‌تایی' : 'یکی') + ': <b>' + toFa(count) + '</b>';
+  g.appendChild(lbl);
+
+  return g;
+}
+
+function renderBlocks(container, tens, ones, opts = {}){
+  container.innerHTML = '';
+  container.appendChild(makeGroup('tens', tens, opts));
+  container.appendChild(makeGroup('one', ones, opts));
+}
+
+/* =========================================================
+   حالت ۱: یاد بگیر
+   ========================================================= */
+let learnToken = 0, learnBusy = false;
+
+function resetLearn(){
+  learnToken++;
+  learnBusy = false;
+  $('learnBlocks').innerHTML = '';
+  $('learnEq').textContent = '';
+  $('learnNum').textContent = toFa(0);
+  $('learnNum').classList.remove('bump');
+  $('learnMsg').className = 'msg';
+  $('learnMsg').textContent = 'دکمه‌ی شروع را بزن؛ با هم ده‌تایی و یکی می‌سازیم! 👇';
+  $('learnStart').disabled = false;
+  $('learnStart').textContent = '▶ شروع';
+}
+
+async function startLearn(){
+  if(learnBusy) return;
+  ac();
+  learnBusy = true;
+  const my = ++learnToken;
+
+  const tens = rnd(1, 6);
+  const ones = rnd(0, 9);
+  const total = tens * 10 + ones;
+
+  $('learnStart').disabled = true;
+  $('learnBlocks').innerHTML = '';
+  $('learnEq').textContent = '';
+  $('learnNum').textContent = toFa(0);
+  $('learnMsg').className = 'msg info';
+  $('learnMsg').textContent = 'با دقت نگاه کن... 👀';
+
+  const grid = $('learnBlocks');
+  const gTens = makeGroup('tens', 0);
+  const gOnes = makeGroup('one', 0);
+  grid.appendChild(gTens);
+  grid.appendChild(gOnes);
+  const rowT = gTens.querySelector('.row');
+  const rowO = gOnes.querySelector('.row');
+  rowT.innerHTML = ''; rowO.innerHTML = '';
+
+  let cur = 0;
+
+  for(let i = 0; i < tens; i++){
+    if(my !== learnToken) return;
+    rowT.appendChild(makeBlock('tens', 0));
+    gTens.classList.remove('empty');
+    gTens.querySelector('.label').innerHTML = 'ده‌تایی: <b>' + toFa(i + 1) + '</b>';
+    cur += 10;
+    $('learnNum').textContent = toFa(cur);
+    bump($('learnNum'));
+    popSound(i + 1, true);
+    await sleep(430);
+  }
+
+  for(let j = 0; j < ones; j++){
+    if(my !== learnToken) return;
+    rowO.appendChild(makeBlock('one', 0));
+    gOnes.classList.remove('empty');
+    gOnes.querySelector('.label').innerHTML = 'یکی: <b>' + toFa(j + 1) + '</b>';
+    cur += 1;
+    $('learnNum').textContent = toFa(cur);
+    bump($('learnNum'));
+    popSound(j + 1, true);
+    await sleep(320);
+  }
+
+  if(my !== learnToken) return;
+
+  learnBusy = false;
+  successSound();
+  confetti();
+
+  const eq = $('learnEq');
+  eq.innerHTML =
+    `<span class="t">${toFa(tens)} ده‌تایی</span> + ` +
+    `<span class="o">${toFa(ones)} یکی</span> = ` +
+    `<b>${toFa(total)}</b>`;
+  eq.style.animation = 'none'; void eq.offsetWidth; eq.style.animation = 'fade .4s ease';
+
+  $('learnMsg').className = 'msg';
+  $('learnMsg').textContent = `آفرین! ${toFa(tens)} ده‌تایی و ${toFa(ones)} یکی می‌شود ${toFa(total)} 🎉`;
+  $('learnStart').disabled = false;
+  $('learnStart').textContent = '▶ دوباره';
+}
+
+$('learnStart').addEventListener('click', () => { clickSound(); startLearn(); });
+$('learnReset').addEventListener('click', () => { clickSound(); resetLearn(); });
+
+/* =========================================================
+   حالت ۲: بشمار (کوییز) — نسخه‌ی اصلاح‌شده‌ی نهایی
+   =========================================================
+   نکته‌ی کلیدی:
+   برای سؤال «این عدد چنده؟» گزینه‌ها همیشه دو رقمی هستند.
+   تابع buildOptions تضمین می‌کند که پاسخ درست همیشه داخل
+   گزینه‌ها باشد و هیچ گزینه‌ای خارج از بازه‌ی [min, max] نباشد.
+   ========================================================= */
+let score = 0;
+let quiz = { tens:0, ones:0, total:0, type:'total', answer:0, locked:false };
+
+/* ---------------------------------------------------------
+   ساخت گزینه‌ها — تضمین‌شده و ایمن
+   --------------------------------------------------------- */
+function buildOptions(correct, min, max, count){
+  // 1) مطمئن شو خود پاسخ درست اول لیست هست
+  const options = [correct];
+  const used = new Set([correct]);
+
+  const totalRange = max - min + 1;
+  if(totalRange < count){
+    // بازه خیلی کوچک — همه‌ی مقادیر بازه را برگردان
+    for(let v = min; v <= max; v++){
+      if(!used.has(v)){ options.push(v); used.add(v); }
+    }
+    return options.sort(() => Math.random() - 0.5);
+  }
+
+  // 2) ابتدا نزدیک‌ترین اعداد به پاسخ درست را اضافه کن
+  const candidates = [];
+  for(let i = 1; i <= totalRange; i++){
+    if(correct + i <= max) candidates.push(correct + i);
+    if(correct - i >= min) candidates.push(correct - i);
+  }
+  // shuffle candidates
+  for(let i = candidates.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+  }
+  for(const c of candidates){
+    if(options.length >= count) break;
+    if(!used.has(c)){ options.push(c); used.add(c); }
+  }
+
+  // 3) اگر هنوز کم بود، از بازه‌ی کامل پر کن (با گارد امنیتی)
+  let guard = 0;
+  while(options.length < count && guard < 500){
+    guard++;
+    const v = min + Math.floor(Math.random() * totalRange);
+    if(!used.has(v)){ options.push(v); used.add(v); }
+  }
+
+  // 4) بررسی نهایی: هیچ گزینه‌ای نباید خارج از [min, max] باشد
+  //    (به‌عنوان بیمه‌ی محض؛ انتظار نمی‌رود رخ دهد)
+  for(let i = 0; i < options.length; i++){
+    if(options[i] < min || options[i] > max){
+      let v, g2 = 0;
+      do {
+        v = min + Math.floor(Math.random() * totalRange);
+        g2++;
+      } while(used.has(v) && g2 < 200);
+      used.delete(options[i]);
+      used.add(v);
+      options[i] = v;
+    }
+  }
+
+  // 5) در نهایت، مطمئن شو پاسخ درست واقعاً داخل گزینه‌ها هست
+  if(!options.includes(correct)) options[0] = correct;
+
+  return options.sort(() => Math.random() - 0.5);
+}
+
+/* ---------------------------------------------------------
+   ساخت سؤال جدید
+   --------------------------------------------------------- */
+function newQuiz(){
+  quiz.locked = false;
+
+  const tens = rnd(1, 6);      // ۱ تا ۶ ده‌تایی
+  const ones = rnd(0, 9);      // ۰ تا ۹ یکی
+  const total = tens * 10 + ones;
+
+  // نوع سؤال به‌صورت تصادفی بین سه حالت، ولی حالت «این عدد چنده؟» غالب است
+  let type;
+  const roll = rnd(0, 2);
+  if(roll === 0 && ones > 0) type = 'ones';
+  else if(roll === 1) type = 'tens';
+  else type = 'total';
+
+  let correct, min, max, questionText;
+
+  if(type === 'tens'){
+    correct = tens;
+    min = 1; max = 9;
+    questionText = 'چند <span style="color:#ffd166">ده‌تایی</span> داری؟';
+  } else if(type === 'ones'){
+    correct = ones;
+    min = 0; max = 9;
+    questionText = 'چند <span style="color:#7de3b6">یکی</span> داری؟';
+  } else {
+    // این حالت حتماً دو رقمی است: total از ۱۰ تا ۶۹
+    correct = total;
+    min = 10; max = 69;
+    questionText = 'این عدد چنده؟';
+  }
+
+  quiz = { tens, ones, total, type, answer: correct, locked: false };
+
+  renderBlocks($('quizBlocks'), tens, ones);
+  $('quizQ').innerHTML = questionText;
+  $('quizMsg').className = 'msg';
+  $('quizMsg').textContent = 'یک گزینه را انتخاب کن';
+
+  // ساخت ۴ گزینه
+  const options = buildOptions(correct, min, max, 4);
+
+  // بررسی اطمینان در کنسول (اختیاری، برای دیباگ)
+  // console.log('Quiz:', {type, correct, min, max, options});
+
+  const box = $('quizOptions');
+  box.innerHTML = '';
+  options.forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = toFa(v);
+    b.dataset.value = String(v);
+    b.addEventListener('click', () => answerQuiz(b, v));
+    box.appendChild(b);
+  });
+}
+
+function answerQuiz(btn, val){
+  if(quiz.locked) return;
+  if(val === quiz.answer){
+    quiz.locked = true;
+    btn.classList.add('good');
+    successSound();
+    confetti();
+    score++;
+    $('score').textContent = toFa(score);
+
+    let txt = '';
+    if(quiz.type === 'tens')       txt = `درست! ${toFa(quiz.tens)} ده‌تایی داریم 🎉`;
+    else if(quiz.type === 'ones')  txt = `درست! ${toFa(quiz.ones)} یکی داریم 🎉`;
+    else                           txt = `درست! عدد ${toFa(quiz.total)} است 🎉`;
+
+    $('quizMsg').className = 'msg';
+    $('quizMsg').textContent = txt;
+    setTimeout(newQuiz, 1600);
+  } else {
+    errorSound();
+    btn.classList.add('bad');
+    btn.disabled = true;
+    $('quizMsg').className = 'msg warn';
+    $('quizMsg').textContent = 'اشکال نداره، دوباره بشمار و امتحان کن 💪';
+  }
+}
+
+$('quizSkip').addEventListener('click', () => { clickSound(); newQuiz(); });
+
+/* =========================================================
+   حالت ۳: بساز
+   ========================================================= */
+let build = { tens:0, ones:0, goal:0, done:false };
+
+function newBuild(){
+  build.goal = rnd(12, 58);
+  build.tens = 0;
+  build.ones = 0;
+  build.done = false;
+
+  $('buildTarget').textContent = toFa(build.goal);
+  $('buildMsg').className = 'msg';
+  $('buildMsg').textContent = 'با دکمه‌ها بساز — روی هر قطعه بزن تا برداشته شود';
+  renderBuild();
+}
+
+function renderBuild(){
+  renderBlocks($('buildBlocks'), build.tens, build.ones, {
+    clickable: true,
+    onRemove: type => {
+      if(build.done) return;
+      if(type === 'tens' && build.tens > 0){
+        build.tens--; popSound(1, false); renderBuild(); checkBuild();
+      } else if(type === 'one' && build.ones > 0){
+        build.ones--; popSound(1, false); renderBuild(); checkBuild();
+      }
+    }
+  });
+  updateBuildEq();
+}
+
+function updateBuildEq(){
+  const cur = build.tens * 10 + build.ones;
+  const eq = $('buildEq');
+  eq.innerHTML =
+    `<span class="t">${toFa(build.tens)} ده‌تایی</span> + ` +
+    `<span class="o">${toFa(build.ones)} یکی</span> = ` +
+    `<b>${toFa(cur)}</b>`;
+}
+
+function checkBuild(){
+  const cur = build.tens * 10 + build.ones;
+  const msg = $('buildMsg');
+
+  if(cur === build.goal && !build.done){
+    build.done = true;
+    successSound();
+    confetti();
+    msg.className = 'msg';
+    msg.textContent = `عالی! دقیقاً ${toFa(build.goal)} ساختی 🎉`;
+  } else if(cur > build.goal){
+    msg.className = 'msg warn';
+    msg.textContent = `بیشتر از ${toFa(build.goal)} شد! یه کم کم کن ✂️`;
+  } else if(cur < build.goal && !build.done){
+    msg.className = 'msg info';
+    msg.textContent = `تا حالا ${toFa(cur)} ساخته‌ای... ادامه بده 💪`;
+  }
+}
+
+$('buildAddTen').addEventListener('click', () => {
+  if(build.done) return;
+  ac(); clickSound();
+  build.tens++;
+  popSound(build.tens, true);
+  renderBuild();
+  checkBuild();
+});
+
+$('buildAddOne').addEventListener('click', () => {
+  if(build.done) return;
+  ac(); clickSound();
+  build.ones++;
+  popSound(build.ones, true);
+  renderBuild();
+  checkBuild();
+});
+
+$('buildReset').addEventListener('click', () => { clickSound(); newBuild(); });
+
+/* =========================================================
+   تب‌ها
+   ========================================================= */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    ac(); clickSound();
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $('panel-' + tab.dataset.t).classList.add('active');
+
+    if(tab.dataset.t === 'learn') resetLearn();
+    if(tab.dataset.t === 'quiz')  newQuiz();
+    if(tab.dataset.t === 'build') newBuild();
+  });
+});
+
+/* =========================================================
+   کلید صدا
+   ========================================================= */
+$('soundBtn').addEventListener('click', function(){
+  soundOn = !soundOn;
+  this.textContent = soundOn ? '🔊' : '🔇';
+  this.classList.toggle('off', !soundOn);
+  if(soundOn){ ac(); clickSound(); }
+});
+
+/* =========================================================
+   شروع
+   ========================================================= */
+resetLearn();
+newBuild();
+document.addEventListener('touchstart', () => ac(), { once: true });
+document.addEventListener('click', () => ac(), { once: true });
+</script>
+</body>
+</html>
